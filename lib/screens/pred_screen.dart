@@ -174,17 +174,7 @@ Future classifyImage(File image) async {
 
     });
   }
-  /*pickImage() async {
-    // ignore: deprecated_member_use
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    if (image == null) return null;
-    setState(() {
-      _loading = true;
-      _image = image;
-    });
-    classifyImage(_image);
-    classifyImageAPI(image);
-  }*/
+
 
   @override
   Widget build(BuildContext context) {
