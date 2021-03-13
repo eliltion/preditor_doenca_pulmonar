@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "510160446914",
+    "project_id": "classificadordoencapulmonar",
+    "storage_bucket": "classificadordoencapulmonar.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:510160446914:android:c5321c53c4dd083628625b",
+        "android_client_info": {
+          "package_name": "br.com.elilson.preditor_doenca_pulmonar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "510160446914-tmsvh4v19v2kdt0ulgstcni6n7n4khhb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.elilson.preditor_doenca_pulmonar",
+            "certificate_hash": "2e27d5a252d8585fa89bb2da81c3801ca7a08289"
+          }
+        },
+        {
+          "client_id": "510160446914-5vpi72m90eef90ea0hg7aric431mfr9o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDg6p_aN5DewMWQxf03bqZ6TyP9hDYfb4Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "510160446914-5vpi72m90eef90ea0hg7aric431mfr9o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
