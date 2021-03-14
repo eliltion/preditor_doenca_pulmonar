@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:preditor_doenca_pulmonar/datas/classificacao.dart';
@@ -320,14 +321,31 @@ class _ImagesScreenState extends State<ImagesScreen> {
                       child: FlatButton(
                         child: Text("Modelo online 96% (Vgg16)",
                           style: TextStyle(color: Colors.red, fontSize: 20.0),),
-                        onPressed: (){
+                        onPressed: () async {
+                          Dio dio = new Dio();
+
+                          String conexao = "conexao";
+                          await dio.get("http://10.0.2.2:43869/items/${conexao}")
+                              .then((response){
+                          print("conectado");
+
                             ImagePicker.pickImage(source: ImageSource.gallery).then((file) {
                                 if(file == null) return;
                                 Navigator.of(context)
                                     .push(MaterialPageRoute(builder: (context) => PredScreen(file, "on", snapshot)));
-                            });
+                             });
 
-                            }
+                          }).catchError((response) {
+                            print("desconectado");
+                            _onFailServer();
+                            Navigator.of(context).pop();
+                          });
+
+
+
+
+
+                        }
                       ),
                     ),
                   ],
@@ -357,4 +375,12 @@ class _ImagesScreenState extends State<ImagesScreen> {
     );
   }
 
+  void _onFailServer() {
+    _scaffoldKey.currentState.showSnackBar(
+        SnackBar(content: Text("Servidor fora do ar"),
+          backgroundColor: Colors.redAccent,
+          duration: Duration(seconds: 4),
+        )
+    );
+  }
 }

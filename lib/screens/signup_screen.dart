@@ -1,6 +1,10 @@
+import 'dart:convert';
+
+import 'package:cpfcnpj/cpfcnpj.dart';
 import 'package:flutter/material.dart';
 import 'package:preditor_doenca_pulmonar/models/user_model.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:http/http.dart' as http;
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -53,7 +57,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     keyboardType: TextInputType.number,
                     validator: (text){
-                      if(text.isEmpty )
+                      String v = CPF.format(text);
+                      if(text.isEmpty || ! CPF.isValid(v))
                         return "CPF Inválido";
                     },
                   ),
@@ -65,6 +70,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     keyboardType: TextInputType.number,
                     validator: (text){
+
                       if(text.isEmpty || text.contains("1234"))
                         return "CRM Inválido";
                     },
@@ -113,7 +119,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       textColor: Colors.white,
                       color: Theme.of(context).primaryColor,
-                      onPressed: (){
+                      onPressed: () async {
                         if(_formKey.currentState.validate()){
                           Map<String, dynamic> userData = {
                             'nome' : _nomeController.text,
@@ -122,12 +128,40 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             'email' : _emailController.text
                           };
 
-                          model.signUp(
-                              userData: userData,
-                              pass: _senhaController.text,
-                              onSuccess: _onSuccess,
-                              onFail: _onFail
-                          );
+                          http.Response response;
+
+                          const request = "https://www.consultacrm.com.br/api/index.php?tipo=crm&uf=&q=bessa&chave=4269284319&destino=json";
+
+                          String situacao = "Ativo";
+                          String nome = (_nomeController.text).toUpperCase();
+
+                          bool validou = false;
+
+                          response = await http.get(request);
+                          Map retorno = json.decode(response.body);
+
+                          for (var i = 0; i < retorno.length; i++){
+                            if(retorno["item"][i]["nome"] == nome && retorno["item"][i]["numero"] == _crmController.text && retorno["item"][i]["situacao"] == situacao){
+                              print(retorno["item"][i]["nome"]);
+                              validou = true;
+                              print(validou);
+                              break;
+                            }else{
+                              validou = false;
+                              print(validou);
+                            }
+                          }
+
+                          if(validou == true) {
+                            model.signUp(
+                                userData: userData,
+                                pass: _senhaController.text,
+                                onSuccess: _onSuccess,
+                                onFail: _onFail
+                            );
+                          }else {
+                            _onFail();
+                          }
                         }
                       },
                     ),
@@ -154,14 +188,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   void _onFail(){
     _scaffoldKey.currentState.showSnackBar(
-        SnackBar(content: Text("Falha ao criar usuário"),
+        SnackBar(content: Text("Falha ao criar usuário, Verifique se o NOME ou CRM são válidos, Verifique também se o CRM está ATIVO"),
           backgroundColor: Colors.redAccent,
-          duration: Duration(seconds: 2),
+          duration: Duration(seconds: 8),
         )
     );
-    Future.delayed(Duration(seconds: 2)).then((_){
-      Navigator.of(context).pop();
-    });
   }
 }
 

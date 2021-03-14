@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:preditor_doenca_pulmonar/models/user_model.dart';
 import 'package:preditor_doenca_pulmonar/screens/login_screen.dart';
@@ -8,6 +9,8 @@ import 'package:scoped_model/scoped_model.dart';
 class CustomDrawer extends StatelessWidget {
 
   final PageController pageController;
+
+
 
   CustomDrawer(this.pageController);
 
@@ -28,6 +31,17 @@ class CustomDrawer extends StatelessWidget {
     );
     return ScopedModelDescendant<UserModel>(
         builder: (context, child, model){
+          String tempo;
+          var horario = DateTime.now().hour;
+          if (horario >= 0 && horario <= 12)
+            tempo = "Bom dia";
+          else if(horario >13 && horario < 18)
+            tempo = "Boa tarde";
+          else
+            tempo ="Boa noite";
+          String nome = model.userData["nome"].toString();
+          var nomeArray = nome.split(" ");
+          print(nomeArray[0]);
           return Drawer(
             child: Stack(
               children: [
@@ -53,7 +67,7 @@ class CustomDrawer extends StatelessWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  Text("Olá, ${!model.isLoggedIn() ? "" : model.userData["nome"]}",
+                                  Text("${model.isLoggedIn() ? "${tempo} Dr. ${nomeArray[0]}" : "Olá"}",
                                     style: TextStyle(
                                         fontSize: 18.0,
                                         fontWeight: FontWeight.bold
