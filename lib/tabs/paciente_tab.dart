@@ -4,6 +4,7 @@ import 'package:preditor_doenca_pulmonar/tiles/paciente_tile.dart';
 
 class PacienteTab extends StatelessWidget {
 
+
   @override
   Widget build(BuildContext context) {
 
@@ -19,7 +20,7 @@ class PacienteTab extends StatelessWidget {
                   tiles: snapshot.data.documents.map((doc) {
                     return PacienteTile(doc);
                   }).toList(),
-                  color: Colors.grey[500])
+                  color: Colors.white)
               .toList();
           return ListView(
             children: dividedTiles,

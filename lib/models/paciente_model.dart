@@ -28,6 +28,22 @@ class PacienteModel extends Model{
 
   }
 
+  void updatePaciente({@required Map<String, dynamic> pacienteData,
+    @required VoidCallback onSuccess, @required VoidCallback onFail, @required DocumentSnapshot snapshot}) async{
+
+    await _updatePacienteData(pacienteData, snapshot);
+
+    onSuccess();
+    isLoading = false;
+    notifyListeners();
+  }
+
+  Future<Null> _updatePacienteData(Map<String, dynamic> pacienteData, DocumentSnapshot snapshot) async{
+    this.pacienteData = pacienteData;
+    await Firestore.instance.collection("paciente").document(snapshot.documentID).updateData(pacienteData);
+
+  }
+
 
 
 }

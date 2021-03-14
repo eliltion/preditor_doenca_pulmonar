@@ -7,6 +7,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:preditor_doenca_pulmonar/datas/cart_product.dart';
+import 'package:preditor_doenca_pulmonar/datas/image_data.dart';
+import 'package:preditor_doenca_pulmonar/datas/paciente_data.dart';
 import 'package:preditor_doenca_pulmonar/models/user_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -17,6 +19,8 @@ class CartModel extends Model{
 
   CartModel(this.user);
 
+  PacienteData pacient;
+
   static CartModel of(BuildContext context) =>
       ScopedModel.of<CartModel>(context);
 
@@ -26,8 +30,8 @@ class CartModel extends Model{
     CartProduct ct = cartProduct;
 
     if(image != null){
-      StorageUploadTask task = FirebaseStorage.instance.ref().child("image_lung").child(
-        DateTime.now().microsecondsSinceEpoch.toString()
+      StorageUploadTask task = FirebaseStorage.instance.ref().child("image_lung").child(cartProduct.classes[0]).child(
+        cartProduct.classes[0]+DateTime.now().microsecondsSinceEpoch.toString()
       ).putFile(image);
 
       StorageTaskSnapshot taskSnapshot = await task.onComplete;
@@ -42,12 +46,20 @@ class CartModel extends Model{
     notifyListeners();
   }
 
-  void removeCartItem(CartProduct cartProduct){
+  Future<void> updateDescritionImage(CartProduct cartProduct, ImageData id, String idPaciente){
 
-   /* Firestore.instance.collection("user").document(user.firebaseUser.uid)
-          .collection("cart").document(cartProduct.cid).delete();
+    print(idPaciente);
+    print(id.id);
 
-    products.remove(cartProduct);*/
+    Firestore.instance.collection("paciente").document(idPaciente)
+        .collection("radio").document(id.id).updateData(cartProduct.todescriptionMap());
+
+    notifyListeners();
+  }
+
+  void removePaciente(String idPaciente){
+
+    Firestore.instance.collection("paciente").document(idPaciente).delete();
 
     notifyListeners();
 

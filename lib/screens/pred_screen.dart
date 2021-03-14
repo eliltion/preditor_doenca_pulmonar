@@ -255,7 +255,9 @@ Future classifyImage(File image) async {
           }else {
             children = const <Widget>[
               SizedBox(
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.teal),
+                ),
                 width: 60,
                 height: 60,
               ),

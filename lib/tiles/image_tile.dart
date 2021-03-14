@@ -9,14 +9,15 @@ class ImageTile extends StatelessWidget {
 
   final _nameController = TextEditingController();
 
-  ImageTile(this.type, this.image);
+  DocumentSnapshot snapshot;
+  ImageTile(this.type, this.image, this.snapshot);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => RadioScreen(image)));
+            .push(MaterialPageRoute(builder: (context) => RadioScreen(image, snapshot)));
       },
       child: Card(
           child: _grade(type, context)

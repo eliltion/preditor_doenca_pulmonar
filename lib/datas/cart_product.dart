@@ -14,11 +14,20 @@ class CartProduct {
 
   CartProduct();
 
-  //provavelmente será a documento (radio)
+  //provavelmente será o documento (radio)
   CartProduct.from(DocumentSnapshot document){
     description = document.data["descrition"];
   }
 
+  //realiza update da descrição e data de atualização da descrição da imagem
+  Map<String, dynamic> todescriptionMap(){
+    return{
+      "description" : description,
+      "data" : data
+    };
+  }
+
+  //insere informações da imagem na tabela de radio.
   Map<String, dynamic> toMap(){
     return{
       "description" : description,

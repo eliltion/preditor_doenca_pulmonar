@@ -26,74 +26,75 @@ class CustomDrawer extends StatelessWidget {
           )
       ),
     );
-    return Drawer(
-      child: Stack(
-        children: [
-          _buildDrawerBack(),
-          ListView(
-            padding: EdgeInsets.only(left: 32.0, top: 16.0),
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(bottom: 8.0),
-                padding: EdgeInsets.fromLTRB(0.0, 16.0, 16.0, 8.0),
-                height: 170.0,
-                child: Stack(
+    return ScopedModelDescendant<UserModel>(
+        builder: (context, child, model){
+          return Drawer(
+            child: Stack(
+              children: [
+                _buildDrawerBack(),
+                ListView(
+                  padding: EdgeInsets.only(left: 32.0, top: 16.0),
                   children: <Widget>[
-                    Positioned(
-                        top: 8.0,
-                        left: 0.0,
-                        child: Text("Predição \nDoença Pulmonar",
-                        style: TextStyle(fontSize: 28.0, fontWeight: FontWeight.bold),),
-                    ),
-                    Positioned(
-                      left: 0.0,
-                      bottom: 0.0,
-                      child: ScopedModelDescendant<UserModel>(
-                        builder: (contex, child, model){
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text("Olá, ${!model.isLoggedIn() ? "" : model.userData["nome"]}",
-                                style: TextStyle(
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.bold
-                                ),
-                              ),
-                              GestureDetector(
-                                child: Text(
-                                  !model.isLoggedIn() ?
-                                  "Entre ou cadastre-se"
-                                  : "Sair",
-                                  style: TextStyle(
-                                      color: Theme.of(context).primaryColor,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold
+                    Container(
+                      margin: EdgeInsets.only(bottom: 8.0),
+                      padding: EdgeInsets.fromLTRB(0.0, 16.0, 16.0, 8.0),
+                      height: 170.0,
+                      child: Stack(
+                        children: <Widget>[
+                          Positioned(
+                            top: 8.0,
+                            left: 0.0,
+                            child: Text("Predição \nDoença Pulmonar",
+                              style: TextStyle(fontSize: 28.0, fontWeight: FontWeight.bold),),
+                          ),
+                          Positioned(
+                              left: 0.0,
+                              bottom: 0.0,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text("Olá, ${!model.isLoggedIn() ? "" : model.userData["nome"]}",
+                                    style: TextStyle(
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold
+                                    ),
                                   ),
-                                ),
-                                onTap: (){
-                                  if(!model.isLoggedIn())
-                                  Navigator.of(context).push(
-                                      MaterialPageRoute(builder: (context)=>LoginScreen())
-                                  );
-                                  else
-                                    model.signOut();
-                                },
+                                  GestureDetector(
+                                    child: Text(
+                                      !model.isLoggedIn() ?
+                                      "Entre ou cadastre-se"
+                                          : "Sair",
+                                      style: TextStyle(
+                                          color: Theme.of(context).primaryColor,
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.bold
+                                      ),
+                                    ),
+                                    onTap: (){
+                                      if(!model.isLoggedIn())
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(builder: (context)=>LoginScreen())
+                                        );
+                                      else
+                                        model.signOut();
+                                    },
+                                  )
+                                ],
                               )
-                            ],
-                          );
-                        },
-                      )
+                          ),
+                        ],
+                      ),
                     ),
+                    Divider(color: Colors.black, height: 3.0,),
+                    DrawerTile(Icons.home, "Início", pageController, 0),
+                    if(model.isLoggedIn())
+                      DrawerTile(Icons.people, "Pacientes", pageController, 1),
                   ],
-                ),
-              ),
-              Divider(color: Colors.black, height: 3.0,),
-              DrawerTile(Icons.home, "Início", pageController, 0),
-              DrawerTile(Icons.people, "Pacientes", pageController, 1),
-            ],
-          )
-        ],
-      ),
+                )
+              ],
+            ),
+          );
+        }
     );
   }
 }
